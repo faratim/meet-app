@@ -8,15 +8,22 @@ describe('<NumberOfEvents /> component', () => {
         NumberOfEventsWrapper = shallow(<NumberOfEvents />);
     });
 
-    test('element is rendered', () => {
-        expect(NumberOfEventsWrapper.find('.number-of-events')).toHaveLength(1);
+    test('render NumberOfEvents element', () => {
+        expect(NumberOfEventsWrapper.find('.NumberOfEvents')).toHaveLength(1);
     });
 
-    test('input box is rendered', () => {
-        expect(NumberOfEventsWrapper.find('.number-of-events-input')).toHaveLength(1);
+    test('render text input', () => {
+        expect(NumberOfEventsWrapper.find('input.number')).toHaveLength(1);
+        expect(NumberOfEventsWrapper.find('label')).toHaveLength(1);
     });
 
-    test('default number is 32', () => {
-        expect(NumberOfEventsWrapper.find('.number-of-events-input').prop('value')).toEqual(32);
-    })
-})
+    /* test('render default input no. 32',()=>{
+    expect(NumberOfEventsWrapper.state('inputNr')).toBe(32);
+    expect(NumberOfEventsWrapper.find('input.number').prop('value')).toBe(32);
+  });
+  test('inputNr matches the inputed value', ()=>{
+    NumberOfEventsWrapper.setState({inputNr: 32});
+    NumberOfEventsWrapper.find('input.number').simulate('change', {target: {value: 20}});
+    expect(NumberOfEventsWrapper.state('inputNr')).toBe(20);
+  }); */
+});
