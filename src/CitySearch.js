@@ -32,7 +32,7 @@ class CitySearch extends Component {
             showSuggestions: false,
         });
 
-        this.props.updateEvents(suggestion); //what would happen when here use query as parameter?
+        this.props.updateEvents(suggestion);
     };
 
     render() {
