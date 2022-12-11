@@ -76,16 +76,20 @@ input[type='number'] {
     background-color: #bcdcdb;
 }
 
-.event {
+.Event {
     padding: 10px 10px 35px;
     margin-bottom: 10px;
     text-align: left;
     border: 1px solid #ccc;
     border-radius: 4px;
     position: relative;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.details-btn {
+button.show-details,
+button.hide-details {
     position: absolute;
     right: 5px;
     bottom: 5px;
@@ -114,7 +118,7 @@ input[type='number'] {
     overflow-x: hidden;
 }
 
-.numberOfEvents {
+.NumberOfEvents {
     width: 200px;
     margin: 20px auto;
     text-align: center;
