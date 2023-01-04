@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import './nprogress.css';
-
 import EventList from './EventList';
 import CitySearch from './CitySearch';
 import NumberOfEvents from './NumberOfEvents';
-
+import { InfoAlert } from './Alert';
 import { getEvents, extractLocations } from './api';
 //import { mockData } from './mock-data';
 
@@ -56,6 +55,12 @@ class App extends Component {
     render() {
         return (
             <div className='App'>
+                {!navigator.onLine && (
+                    <InfoAlert
+                        className='alert-centered'
+                        text='App is currently offline. You are seeing data from the last time you logged in which may be out of date.'
+                    />
+                )}
                 <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
                 <NumberOfEvents updateEvents={this.updateEvents} />
                 <EventList events={this.state.events} />
