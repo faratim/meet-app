@@ -1,11 +1,5 @@
-/**@param {*} events:
- * The following function should be in the “api.js” file.
- * This function takes an events array, then uses map to create a new array with only locations.
- * It will also remove all duplicates by creating another new array using the spread operator and spreading a Set.
- * The Set will remove all duplicates from the array.
- */
-import axios from 'axios';
 import { mockData } from './mock-data';
+import axios from 'axios';
 import NProgress from 'nprogress';
 
 export const getAccessToken = async () => {
@@ -37,7 +31,6 @@ const checkToken = async (accessToken) => {
 
 export const getEvents = async () => {
     NProgress.start();
-
     if (window.location.href.startsWith('http://localhost')) {
         NProgress.done();
         return mockData;
@@ -46,14 +39,14 @@ export const getEvents = async () => {
     if (!navigator.onLine) {
         const data = localStorage.getItem('lastEvents');
         NProgress.done();
-        return data ? JSON.parse(data).events : [];
+        // eslint-disable-next-line no-undef
+        return data ? JSON.parse(events).events : [];
     }
 
     const token = await getAccessToken();
-
     if (token) {
         removeQuery();
-        const url = 'https://tjo56q36ze.execute-api.us-east-1.amazonaws.com/dev/api/get-events' + '/' + token;
+        const url = `https://tjo56q36ze.execute-api.us-east-1.amazonaws.com/dev/api/get-events/${token}`;
         const result = await axios.get(url);
         if (result.data) {
             var locations = extractLocations(result.data.events);
@@ -83,7 +76,7 @@ const removeQuery = () => {
 
 const getToken = async (code) => {
     const encodeCode = encodeURIComponent(code);
-    const { access_token } = await fetch('https://tjo56q36ze.execute-api.us-east-1.amazonaws.com/dev/api/token' + '/' + encodeCode)
+    const { access_token } = await fetch(`https://tjo56q36ze.execute-api.us-east-1.amazonaws.com/dev/api/token/${encodeCode}`)
         .then((res) => {
             return res.json();
         })
