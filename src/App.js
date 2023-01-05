@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import './App.css';
 import './nprogress.css';
+
 import EventList from './EventList';
 import CitySearch from './CitySearch';
 import NumberOfEvents from './NumberOfEvents';
+import WelcomeScreen from './WelcomeScreen';
 import EventGenre from './EventGenre';
-import { InfoAlert } from './Alert';
-import { getEvents, extractLocations } from './api';
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-//import { mockData } from './mock-data';
+
+import { getEvents, extractLocations, checkToken, getAccessToken } from './api';
+import { OfflineAlert } from './Alert';
+
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 class App extends Component {
     state = {
@@ -16,15 +19,32 @@ class App extends Component {
         locations: [],
         seletedLocation: 'all',
         eventCount: 32,
+        showWelcomeScreen: undefined,
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         this.mounted = true;
-        getEvents().then((events) => {
-            if (this.mounted) {
-                this.setState({ events, locations: extractLocations(events) });
-            }
-        });
+        const accessToken = localStorage.getItem('access_token');
+        let shouldGetEvents;
+        if (navigator.onLine) {
+            const isTokenValid = (await checkToken(accessToken)).error ? false : true;
+            const searchParams = new URLSearchParams(window.location.search);
+            const code = searchParams.get('code');
+            this.setState({ showWelcomeScreen: !(code || isTokenValid) });
+            shouldGetEvents = (code || isTokenValid) && this.mounted;
+        } else {
+            shouldGetEvents = accessToken && this.mounted;
+            this.setState({ showWelcomeScreen: false });
+        }
+
+        if (shouldGetEvents) {
+            getEvents().then((events) => {
+                if (this.mounted) {
+                    events = events.slice(0, this.state.eventCount);
+                    this.setState({ events, locations: extractLocations(events) });
+                }
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -65,21 +85,16 @@ class App extends Component {
     };
 
     render() {
+        if (this.state.showWelcomeScreen === undefined) return <div className='App' />;
+
         return (
             <div className='App'>
+                {!navigator.onLine && <OfflineAlert text='You are currently offline. The event list may not be up-to-date.' className='OfflineAlert' />}
                 <h1>Meet App</h1>
-                <h4>Choose your nearest city.</h4>
-                {!navigator.onLine && (
-                    <InfoAlert
-                        className='alert-centered'
-                        text='App is currently offline. You are seeing data from the last time you logged in which may be out of date.'
-                    />
-                )}
                 <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
                 <NumberOfEvents updateEvents={this.updateEvents} />
 
                 <div className='data-vis-wrapper'>
-                    <h4>Events in each city</h4>
                     <EventGenre events={this.state.events} />
                     <ResponsiveContainer height={400}>
                         <ScatterChart
@@ -91,15 +106,22 @@ class App extends Component {
                             }}
                         >
                             <CartesianGrid />
-                            <XAxis type='category' dataKey='City' name='city' />
-                            <YAxis type='number' dataKey='number' name='# of events' />
+                            <XAxis type='category' dataKey='city' name='City' />
+                            <YAxis type='number' dataKey='number' name='Number of events' allowDecimals={false} />
                             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                            <Scatter data={this.getData()} fill='#8884d8' />
+                            <Scatter data={this.getData()} fill='#c97484' name='Number of events in each city' />
+                            <Legend verticalAlign='bottom' height={60} />
                         </ScatterChart>
                     </ResponsiveContainer>
                 </div>
 
                 <EventList events={this.state.events} />
+                <WelcomeScreen
+                    showWelcomeScreen={this.state.showWelcomeScreen}
+                    getAccessToken={() => {
+                        getAccessToken();
+                    }}
+                />
             </div>
         );
     }

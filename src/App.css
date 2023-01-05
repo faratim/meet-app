@@ -45,8 +45,14 @@ input[type='number'] {
     flex-direction: column;
     flex-basis: 300px;
     max-width: 600px;
-    margin: auto;
+    margin: 40px auto 30px;
     position: relative;
+}
+
+label[for='city'],
+label[for='number-of-events'] {
+    margin-bottom: 10px;
+    font-weight: 700;
 }
 
 .suggestions {
@@ -55,7 +61,7 @@ input[type='number'] {
     z-index: 2;
     align-self: center;
     margin: 0;
-    top: 40px;
+    top: 70px;
     font-size: 14px;
     box-shadow: 10px 10px 16px -12px rgba(0, 0, 0, 0.75);
 }
@@ -77,69 +83,76 @@ input[type='number'] {
 }
 
 .Event {
-    padding: 10px 10px 35px;
+    padding: 10px;
     margin-bottom: 10px;
     text-align: left;
     border: 1px solid #ccc;
     border-radius: 4px;
-    position: relative;
-    max-width: 1000px;
+    max-width: 2000px;
     margin-left: auto;
     margin-right: auto;
 }
 
-button.show-details,
-button.hide-details {
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
+.show-details,
+.hide-details {
+    display: flex;
+    margin: 15px 0 0 auto;
     padding: 5px 8px;
-    border-radius: 4px;
     outline: none;
+    border-radius: 8px;
     cursor: pointer;
+    background: #2f2f2f;
+    border: solid 2px #2f2f2f;
+    color: white;
 }
 
-.name {
-    font-size: 18px;
-    font-weight: 600;
+.show-details:hover,
+.hide-details:hover {
+    background: rgba(47, 47, 47, 0.85);
 }
 
-.group-name {
-    text-transform: uppercase;
-    font-size: 14px;
-}
+/* .name {
+  font-size: 18px;
+  font-weight: 600;
+} */
 
-.going,
+/* .group-name {
+  text-transform: uppercase;
+  font-size: 14px;
+} */
+
+/* .going,
 .visibility {
-    font-style: italic;
+  font-style: italic;
+}
+ */
+.about-event {
+    margin-top: 5px;
 }
 
 .description {
     overflow-x: hidden;
+    margin-top: 5px;
 }
 
 .NumberOfEvents {
+    display: flex;
+    flex-direction: column;
     width: 250px;
-    margin: 20px auto;
+    margin: 0px auto 30px;
     text-align: center;
 }
 
-.NumberOfEvents .number {
-    margin: 5px 0 0 0;
-}
-
-.button-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 20px;
-    padding: 20px;
-    font-family: sans-serif;
+.OfflineAlert p {
+    margin: 0 auto;
 }
 
 .data-vis-wrapper {
     display: flex;
     align-items: center;
     flex-direction: column;
+    max-width: 2000px;
+    margin: 0 auto;
 }
 .data-vis-wrapper .recharts-responsive-container {
     min-width: 100%;
@@ -149,57 +162,75 @@ button.hide-details {
     overflow: visible;
 }
 
-.login-button {
-    color: #494949;
-    text-transform: uppercase;
-    text-decoration: none;
-    background: #ffffff;
-    padding: 20px;
-    border: 4px solid #494949;
-    display: inline-block;
-    transition: all 0.4s ease 0s;
-    min-width: 10rem;
-    margin: 1rem;
+/* .button-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+  padding: 20px;
+  font-family: sans-serif;
 }
-
+.data-vis-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.data-vis-wrapper .recharts-responsive-container {
+  min-width: 100%;
+  display: flex;
+}
+.recharts-surface {
+  overflow: visible;
+}
+.login-button {
+  color: #494949;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #ffffff;
+  padding: 20px;
+  border: 4px solid #494949;
+  display: inline-block;
+  transition: all 0.4s ease 0s;
+  min-width: 10rem;
+  margin: 1rem;
+}
 .google-btn {
-    width: 184px;
-    height: 42px;
-    margin: 1rem;
-    background-color: #4285f4;
-    border-radius: 2px;
-    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+  width: 184px;
+  height: 42px;
+  margin: 1rem;
+  background-color: #4285f4;
+  border-radius: 2px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
 }
 .google-btn:hover {
-    box-shadow: 0 0 6px #4285f4;
+  box-shadow: 0 0 6px #4285f4;
 }
 .google-btn:active {
-    background: #1669f2;
+  background: #1669f2;
 }
 .google-icon-wrapper {
-    position: absolute;
-    margin-top: 1px;
-    margin-left: 1px;
-    width: 40px;
-    height: 40px;
-    border-radius: 2px;
-    background-color: #fff;
+  position: absolute;
+  margin-top: 1px;
+  margin-left: 1px;
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  background-color: #fff;
 }
 .google-icon {
-    position: absolute;
-    margin-top: 11px;
-    margin-left: -8px;
-    width: 18px;
-    height: 18px;
+  position: absolute;
+  margin-top: 11px;
+  margin-left: -8px;
+  width: 18px;
+  height: 18px;
 }
 .btn-text {
-    float: right;
-    margin: 11px 11px 0 0;
-    color: #fff;
-    font-size: 14px;
-    letter-spacing: 0.2px;
-    font-family: 'Roboto';
-}
+  float: right;
+  margin: 11px 11px 0 0;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  font-family: "Roboto";
+} */
 
 @media only screen and (min-width: 992px) {
     .data-vis-wrapper {
