@@ -1,141 +1,154 @@
 # 🙋🏾‍♂️🙋🏻‍♀️ Meetapp
+
 Connect with interesting people near you at events in line with your interests.
 
+A serverless, progressive web application (PWA) with React built by using test-driven development (TDD) technique. The documentation (acceptance test) of the app was built by applying the behavior-driven development (BDD) technique. The application uses OAuth 2.0 to access and use the Google Calendar API to fetch upcoming events.
+
 ## ☑️ Objectives
-- Build a serverless, progressive web application (PWA) with React.
-- Use test-driven development (TDD) and behavior-driven developement (BDD) techniques.
-- Use Google Calendar API to fetch upcoming events.
-- Data visualisation (number of upcoming events, & popularity of event genres)
+
+-   Build a serverless, progressive web application (PWA) with React.
+-   Use test-driven development (TDD) and behavior-driven developement (BDD) techniques.
+-   Use Google Calendar API to fetch upcoming events.
+-   Data visualisation (number of upcoming events, & popularity of event genres)
 
 ### Context
-- Serverless: No backend maintenance, easy to scale, always available, no cost for idle time.
-- PWAs: Instant loading, offline support, push notifications, “add to home screen” prompt, responsive design, and cross-platform compatibility.
+
+-   Serverless: No backend maintenance, easy to scale, always available, no cost for idle time.
+-   PWAs: Instant loading, offline support, push notifications, “add to home screen” prompt, responsive design, and cross-platform compatibility.
+
+### Link to the App:
+
+https://faratim.github.io/meet-app/
 
 ## ⚙️ Features
 
-### **1. Search Events by City**
-***Scenario 1:*** When user hasn’t searched for a city, show upcoming events from all cities.
+#### 1. Filter events by city
 
->*User Story*:  As a user, I should be able to filter events by city, so that I can see the list of events that take place in that city.
+-   **User story**: As a user I should be able to “filter events by city”, so that I can see the list of events that take place in that city.
+-   **Scenarios**:
 
-*Given* user hasn't searched for any city,
+1. When user hasn’t searched for a city, show upcoming events from all cities.
 
-*When* the user opens the app,
+```
+Given user hasn’t searched for any city
+When the user opens the app
+Then the user should see a list of all upcoming events
+```
 
-*Then* the user should see a list of all upcoming events.
-<br><br>
+2. User should see a list of suggestions when they search for a city.
 
-**Scenario 2:** User should see a list of suggestions when they search for a city.
+```
+Given the main page is open
+When user starts typing in the city textbox
+Then the user should see a list of cities (suggestions) that match what they’ve typed
+```
 
->*User Story*:  As a user, I should be able to see a list of suggestsions when I start typing, so that events that I am show are near my location.
+3. User can select a city from the suggested list.
 
-*Given* the main page is open,
+```
+Given the user was typing “Berlin” in the city textbox and the list of suggested cities is showing
+When the user selects a city (e.g., “Berlin, Germany”) from the list
+Then their city should be changed to that city (i.e., “Berlin, Germany”) and the user should receive a list of upcoming events in that city
+```
 
-*When* the user starts typing in the city textbox,
+#### 2. Show/hide event details
 
-*Then* the user should see a list of cities (suggestions) that match what they've typed.
-<br><br>
+-   **User story**: As a user I should be able to “show and hide event details”, so that I can see the detailed information about an event which I'm interested in and hide it after finish reading.
+-   **Scenarios**:
 
-**Scenario 3:** User can select a city from the suggested list.
+1. An event element is collapsed by default.
 
->*User Story*:  As a user, I should be able to select a city from the sugessted list, so that I can see events relevant to my location.
+```
+Given the list of events was open
+When the user scrolls through the list
+Then the details of events should be hidden
+```
 
-*Given* city suggestsions are visible after a user typed something in the city textbox,
+2. User can expand an event to see its details
 
-*When* the user selects a city from the list,
+```
+Given the list of events was open
+When the user click on one event (or show button)
+Then detailed info of that event should be shown to the user
+```
 
-*Then*  user's city should be changed to their selection, and be shown that city's list of events
-<br><br>
+3. User can collapse an event to hide its details.
 
-### **2. Show/Hide Event Details**
-**Scenario 1:** An event element is collapsed by default
+```
+Given the detailed info has been shown to the user
+When the user click on the hide button
+Then the detailed info of that even should be hidden
+```
 
->*User Story*:  As a user, I should initially see a list of events with no details displayed, so that I can quickly see and overview of what is available.
+#### 3. Specify number of events.
 
-*Given* a user has searched for a city,
+-   **User story**: As a user I should be able to specify number of events showing in the list, so that I can decide how many events I can see in the list at once.
+-   **Scenarios**:
 
-*When* the list of events is shown,
+1. When user hasn’t specified a number, 32 is the default number.
 
-*Then* event details should be hidden.
-<br><br>
+```
+Given the user did not specify a number
+When the event list opens
+Then 32 events max. will be shown in the list in one page
+```
 
-**Scenario 2:** User can expand an event to see its details
+2. User can change the number of events they want to see
 
->*User Story*:  As a user, I should be able to reveal event details, so that I can get a more in-depth idea of what the event is about.
+```
+Given the user specified the number
+When event list opens
+Then the specified number of events max. will be shown in the list in one page
+```
 
-*Given* a list of events without details is shown,
+#### 4. Use the app when offline.
 
-*When* a user clicks on an event,
+-   **User story**: As a user I should be able to use the app when offline, so that I can see the events I viewed the last time I was online.
+-   **Scenarios**:
 
-*Then* event details should be shown.
-<br><br>
+1. Show cached data when there’s no internet connection.
 
-**Scenario 3:** User can collapse an event to hide its details
+```
+Given the user has no internet
+When the user opens the app
+Then the cached data should be shown
+```
 
->*User Story*:  As a user, I should be able to hide event details, so that I can see the main overview of available events again.
+2. Show error when user changes the settings (city, time range)
 
-*Given* an event's details were expanded,
+```
+Given the uer has no internet
+When the user changes the setting
+Then an error message should be shown, informing the user internet is required
+```
 
-*When* a user hides it's details,
+#### 5. Add an app shortcut to the home screen
 
-*Then* the event's details should be hidden.
-<br><br>
+-   **User story**: As a user I should be able to add a shortcut of the app to my home screen, so that I can have a faster access to the app everytime I want to use it.
 
-### **3. Specify Number of Events**
-**Scenario 1:** When user hasn’t specified a number, 32 is the default number
+#### 6. View a chart showing the number of upcoming events by city.
 
->*User Story*:  As a user, I should see an adequate number of events automatically so I can started without any additional input.
+-   **User story**: As a user I should be able to view a chart showing the number of upcoming events by city, so that I can have a better overview of how many events in which city.
+-   **Scenarios**:
 
-*Given* a number of events to be shown has not been given,
+1. Show a chart with the number of upcoming events in each city.
 
-*When* a user searches for events,
+```
+Given the user hasn't searched a specific city
+When the user opens the app
+Then a chart with an overview, indicating the number of upcoming events by city will be shown.
+```
 
-*Then* 32 events should be shown.
-<br><br>
+### App Showcase
 
-**Scenario 2:** User can change the number of events they want to see
+1. Welcome-page of Meet App
+   <img alt="A screenshot of the welcome-page of Meet App" src="/img/Screenshot1.png" width="100%">
 
->*User Story*:  As a user, I should be able to change the number of events shown, so I have control over what I see.
+2. Meet App after sign in with google account
+   <img alt="A screenshot of the Meet App after sign in with google account" src="/img/Screenshot2.png" width="100%">
 
-*Given* the user has searched and a list of events is shown,
+3. Giving 'Berlin' in the search field
+   <img alt="A screenshot after giving 'Berlin' in the search field." src="/img/Screenshot3.png" width="100%">
 
-*When* a user specifies a number of events to show,
-
-*Then* the number of events shown should match the user-specified number.
-<br><br>
-
-
-### **4. Use the App When Offline**
-**Scenario 1:** Show cached data when there’s no internet connection
-
->*User Story*:  As a user, I should be able to access the app offline, so that I can view events wherever I am, regardless of network availability.
-
-*Given* the user has accessed the app previously,
-
-*When* connection to internet is lost,
-
-*Then* app will show data from the offline cache.
-<br><br>
-
-**Scenario 2:** Show error when user changes the settings (city, time range)
-
->*User Story*:  As a user, I should be shown an error message when something goes wrong, so I know what happened and can potentially fix it.
-
-*Given* current time and city settings,
-
-*When* a user changes city and time settings,
-
-*Then* an error message should be displayed.
-<br><br>
-
-
-### 5. **Data Visualization**
-**Scenario 1:** Show a chart with the number of upcoming events in each city
-
->*User Story*:  As a user, I should be able to see a chart with the number of upcoming events in each city to give me an idea of where events are happening.
-
-*Given* a user is accessing the app,
-
-*When* a user wants to see data on upcoming events,
-
-*Then* a chart with upcoming events in each city is displayed.
+4. PWA feature
+   <img alt="A screenshot when the app is offline." src="/img/Screenshot4.png" width="100%">
